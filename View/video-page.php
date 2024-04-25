@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,27 +6,311 @@
 include_once '../Controller/ManageVideo.php';
 include_once '../Controller/ManageHistory.php';
 ?>
+
+<style>
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-container textarea {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  min-height: 100px;
+  width: 80%; 
+  height: 80px;
+  display: inline-block; 
+  vertical-align: top; 
+}
+
+.form-container input[type="submit"] {
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #ff6161;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  display: inline-block; 
+  vertical-align: top; 
+}
+
+.form-container input[type="submit"]:hover {
+  background-color: #2c3e50;
+}
+
+.form-container input[type="submit"]:active {
+  background-color: #ff6161;
+  transform: translateY(2px);
+}
+
+<<<<<<< Updated upstream
+=======
+    
+
+>>>>>>> Stashed changes
+</style>
+
 <?php
 session_start();
+<<<<<<< Updated upstream
+=======
+if(isset($_SESSION['userID'])){
+    $watcher = $_SESSION['userID'];
+}
+else{
+    $watcher = 1;
+}
+>>>>>>> Stashed changes
 
 ?>
+
+<style>
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-container textarea {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  min-height: 100px;
+  width: 80%; 
+  height: 80px;
+  display: inline-block; 
+  vertical-align: top; 
+}
+
+.form-container input[type="submit"] {
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #ff6161;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  display: inline-block; 
+  vertical-align: top; 
+}
+
+.form-container input[type="submit"]:hover {
+  background-color: #2c3e50;
+}
+
+.form-container input[type="submit"]:active {
+  background-color: #ff6161;
+  transform: translateY(2px);
+}
+
+</style>
 <?php
+
+include_once '../Controller/ManageVideo.php';
+
+?>
+
+<?php
+
+require_once '../Controller/Database.php';
 // Retrieve the video ID and user ID from the URL query parameters
 $videoId = $_GET['video_id'];
+<<<<<<< Updated upstream
 $userId = $_GET['user_id'];
+=======
+
+
+$theHistory = new ManageHistory();
+$theHistory->updateH($videoId, $watcher);
+
+>>>>>>> Stashed changes
 $video = ManageVideo::getInstance();
-$VideoAttribute = $video->RetriveForVideoPage($videoId, $userId);
+// $VideoAttribute=$video->RetriveForVideoPage($videoId,$userId);
+//$title= $VideoAttribute->getTitle();
 //$title= $VideoAttribute->getTitle();
 //$description=$VideoAttribute->getDescription();
 //$date=$VideoAttribute->getDate();
 //$view=$VideoAttribute->getViews();
 //$category=$VideoAttribute->getCategory();
+<<<<<<< Updated upstream
+//$video1=$VideoAttribute->getUrl();
+if(isset($_POST['addcomment']))
+{
+   $db = new Database ;
+   $fields["UserID"] = $userId ;
+   $username = $db->select("Select * from user where ID = $userId");
+   foreach($username as $val){
+      $fields["to_channel_name"] = $val['Name'] ;
+   }  
+
+=======
+$userId= $VideoAttribute->getUserID();
+$video1 = $VideoAttribute->getUrl();
+$userId =$VideoAttribute->getUserID();
+$video1 = pathinfo($video1, PATHINFO_FILENAME);
+$video1 = "../View/Videos/" . $video1 . "/" . $video1 . "_360.mp4";
+
+
+if(isset($_POST['addcomment']))
+{
+   $db = new Database ;
+
+   $comm['Content'] = $_POST['comment_content'];
+   
+   $db->insert_2("comment",$comm);
+   
+   //    SELECT * FROM comment ORDER BY ID DESC LIMIT 1;
+   
+   $comment = $db->select("Select * from comment ORDER BY ID DESC LIMIT 1");
+   foreach($comment as $val4){
+       $usercomm['CommentID'] = $val4['ID'] ;
+    } 
+    
+    $usercomm['UserID'] = $_SESSION['userID'];
+    $usercomm['VideoID'] = $videoId;
+    
+    $db->insert_2("usercomment",$usercomm);
+    
+
+   $fields["UserID"] = $userId ;
+   $username = $db->select("Select * from user where ID = $userId");
+   foreach($username as $val){
+      $fields["to_channel_name"] = $val['Name'] ;
+   }  
+
+>>>>>>> Stashed changes
+   $fields["from_channel_id"] = $_SESSION['userID'] ;
+   $fields["from_channel_name"] = $_SESSION['userName'] ;
+   $fields["video_id"] = $videoId ;
+   // $fields["Content"] ;
+   // $fields["Seen"] ;
+   // $fields["CreatedAt"] ;
+   $_SESSION["videoID"] = $videoId ;
+   $_SESSION["channelID"] = $userId ;
+   
+   $svideo = $db->select("Select * from video where ID = $videoId");
+   foreach($svideo as $vall){
+      $fields["video_name"] = $vall['Title'] ;
+   }
+   
+   $fields["n_type"] = 2 ;
+
+   // echo $fields["to_channel_id"];
+   // echo $fields["to_channel_name"];
+   // echo $fields["from_channel_id"];
+   // echo $fields["from_channel_name"];
+   // echo $fields["video_id"];
+   // echo $fields["Content"];
+   // echo $fields["Seen"];
+   // echo $fields["CreatedAt"];
+   // echo $fields["video_name"];
+   // echo $fields["n_type"];
+   
+   // $dbb = new Database ;
+   $db->insert_2("notification",$fields);
+   // $dbb->insert("INSERT INTO `video_sharing`.`notification` (`to_channel_id`, `from_channel_id`, `from_channel_name`, `video_id`, `video_name`, `n_type`) VALUES ('1', '5', 'Kiroloss', '1', 'PHP', '2')");
+
+}
+?>
+
+<?php
+// Retrieve the video ID and user ID from the URL query parameters
+$videoId = $_GET['video_id'];
+<<<<<<< Updated upstream
+$userId = $_GET['user_id'];
+=======
+
+
+$theHistory = new ManageHistory();
+$theHistory->updateH($videoId, $watcher);
+
+>>>>>>> Stashed changes
+$video = ManageVideo::getInstance();
+$VideoAttribute = $video->RetriveForVideoPage($videoId, $userId);
+//$title= $VideoAttribute->getTitle();
+//$title= $VideoAttribute->getTitle();
+//$description=$VideoAttribute->getDescription();
+//$date=$VideoAttribute->getDate();
+//$view=$VideoAttribute->getViews();
+//$category=$VideoAttribute->getCategory();
+$userId= $VideoAttribute->getUserID();
 $video1 = $VideoAttribute->getUrl();
 $video1 = pathinfo($video1, PATHINFO_FILENAME);
 $video1 = "../View/Videos/" . $video1 . "/" . $video1 . "_360.mp4";
+<<<<<<< Updated upstream
 echo $video1;
 $h = new ManageHistory();
 $h->updateH($videoId,$userId);
+=======
+
+
+if(isset($_POST['addcomment']))
+{
+   $db = new Database ;
+
+   $comm['Content'] = $_POST['comment_content'];
+   
+   $db->insert_2("comment",$comm);
+   
+   //    SELECT * FROM comment ORDER BY ID DESC LIMIT 1;
+   
+   $comment = $db->select("Select * from comment ORDER BY ID DESC LIMIT 1");
+   foreach($comment as $val4){
+       $usercomm['CommentID'] = $val4['ID'] ;
+    } 
+    
+    $usercomm['UserID'] = $_SESSION['userID'];
+    $usercomm['VideoID'] = $videoId;
+    
+    $db->insert_2("usercomment",$usercomm);
+    
+
+   $fields["UserID"] = $userId ;
+   $username = $db->select("Select * from user where ID = $userId");
+   foreach($username as $val){
+      $fields["to_channel_name"] = $val['Name'] ;
+   }  
+
+   $fields["from_channel_id"] = $_SESSION['userID'] ;
+   $fields["from_channel_name"] = $_SESSION['userName'] ;
+   $fields["video_id"] = $videoId ;
+   // $fields["Content"] ;
+   // $fields["Seen"] ;
+   // $fields["CreatedAt"] ;
+   $_SESSION["videoID"] = $videoId ;
+   $_SESSION["channelID"] = $userId ;
+   
+   $svideo = $db->select("Select * from video where ID = $videoId");
+   foreach($svideo as $vall){
+      $fields["video_name"] = $vall['Title'] ;
+   }
+   
+   $fields["n_type"] = 2 ;
+
+   // echo $fields["to_channel_id"];
+   // echo $fields["to_channel_name"];
+   // echo $fields["from_channel_id"];
+   // echo $fields["from_channel_name"];
+   // echo $fields["video_id"];
+   // echo $fields["Content"];
+   // echo $fields["Seen"];
+   // echo $fields["CreatedAt"];
+   // echo $fields["video_name"];
+   // echo $fields["n_type"];
+   
+   // $dbb = new Database ;
+   $db->insert_2("notification",$fields);
+   // $dbb->insert("INSERT INTO `video_sharing`.`notification` (`to_channel_id`, `from_channel_id`, `from_channel_name`, `video_id`, `video_name`, `n_type`) VALUES ('1', '5', 'Kiroloss', '1', 'PHP', '2')");
+
+}
+>>>>>>> Stashed changes
 ?>
 
 <head>
@@ -65,6 +350,7 @@ $h->updateH($videoId,$userId);
                </button>
             </div>
          </div>
+<<<<<<< Updated upstream
       </form>
       <!-- Navbar -->
       <ul class="navbar-nav ml-auto ml-md-0 osahan-right-navbar">
@@ -211,6 +497,18 @@ $h->updateH($videoId,$userId);
       <div id="content-wrapper">
          <div class="container-fluid pb-0">
             <div class="video-block section-padding">
+=======
+
+         <div class="form-container">
+              <form method="post">
+               <textarea name="comment_content"></textarea>
+                 <input type="submit" name="addcomment" value="Add Comment">
+              </form>
+         </div>
+
+         <div class="col-md-4">
+            <div class="single-video-right">
+>>>>>>> Stashed changes
                <div class="row">
                   <div class="col-md-8">
                      <div class="single-video-left">
@@ -272,6 +570,7 @@ $h->updateH($videoId,$userId);
                               <i onclick="dislike()" id="di" class="fas fa-thumbs-down"></i>
                            </div>
                         </div>
+<<<<<<< Updated upstream
                         <div class="wrraapper" style="margin-bottom: 10%; margin-left: 23%; margin-top:-5%;">
                            <p style="font-size: large; color: white; font-weight: 400;">+Save</p>
                            </select>
@@ -287,6 +586,361 @@ $h->updateH($videoId,$userId);
                                  data-toggle="tooltip" data-original-title="Verified"><i
                                     class="fas fa-check-circle text-success"></i></span></p>
                            <small>Published on Aug 10, 2018</small>
+=======
+                        <div class="single-video-title boxx mb-3">
+                            <div class="single-video-author boxx mb-3" style="margin-bottom:-50%;">
+                                <div class="float-right">
+                                    <button onclick="triggerSubscribeFunction('<?= $watcher;?>','<?= $userId?>')" id="subscribeBtn" class="btn btn-danger" type="button"><span>Subscribe </span><strong>1.4M</strong></button>
+                                    <button class="btn btn btn-outline-danger" type="button" onclick="triggerBellFunction('<?= $watcher;?>','<?= $userId?>')">
+                                        <i class="fas fa-bell"></i>
+                                    </button>
+                                </div>
+
+                                <?php
+                                    $select = $db->select_where('user','ID',$userId);
+                                    foreach($select as $see_noti){
+                                        $ownername = $see_noti['Name'];
+                                    }
+                                ?>
+
+                                <img class="img-fluid" src="img/acc.png" alt="">
+                                <p><a href="#"><strong> <?php echo $ownername ?> </strong></a> <span title="" data-placement="top"
+                                                                                         data-toggle="tooltip" data-original-title="Verified"><i
+                                                class="fas fa-check-circle text-success"></i></span></p>
+                                <small>Published on Aug <?php echo $VideoAttribute->getDate(); ?> </small>
+                            </div>
+                            <div class="single-video-info-content box" style="box-sizing: 20%;">
+                                <h6>Category :</h6>
+                                <p><?php echo $VideoAttribute->getCategory(); ?> </p>
+                                <h6>Description :</h6>
+                                <p><?php echo $VideoAttribute->getDescription(); ?>  </p>
+
+                            </div>
+                            
+                        </div>
+                                      
+                        <!-- Add Comment -->
+                        <div class="form-container">
+                        <form method="post">
+                        <textarea name="comment_content"></textarea>
+                            <input type="submit" name="addcomment" value="Add Comment">
+                        </form>
+                        </div>
+
+<<<<<<< Updated upstream
+=======
+                        <br>
+
+>>>>>>> Stashed changes
+                        <div>
+                        <!-- Retreive Comments -->
+                        <?php 
+                            $comment = $db->select("Select * from usercomment where VideoID = $videoId");
+<<<<<<< Updated upstream
+=======
+                            ?>
+                            <div class="single-video-info-content box" style="box-sizing: 20%;">
+                                <h6>Comments :</h6>
+                                <p><?php
+>>>>>>> Stashed changes
+                            foreach($comment as $val){
+                                $commentid = $val['CommentID'];
+                                $comment2 = $db->select("Select * from comment where ID = $commentid");
+                                foreach($comment2 as $val2){
+<<<<<<< Updated upstream
+                                    echo $val2['Content'];
+                                }
+                            }
+                        ?>
+=======
+                                    ?> <div class="my-dropdown-item2">
+                                            <?php echo $val2['Content'];
+                                    ?> </div> <?php
+                                }
+                            }
+                        ?> </p>
+
+                            </div>
+                            
+>>>>>>> Stashed changes
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <div class="single-video-right">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="main-title">
+                                        <div class="btn-group float-right right-action">
+                                            <a href="#" class="right-action-link text-gray" data-toggle="dropdown"
+                                               aria-haspopup="true" aria-expanded="false">
+                                                Sort by <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star"></i> &nbsp; Top
+                                                    Rated</a>
+                                                <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp;
+                                                    Viewed</a>
+                                                <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i>
+                                                    &nbsp;
+                                                    Close</a>
+                                            </div>
+                                        </div>
+                                        <h6>Up Next</h6>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="video-cardd video-card-list">
+                                        <div class="deo-card-image">
+                                            <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
+                                            <a href="#"><img class="img-fluid" src="img/v1.png" alt=""></a>
+                                            <div class="time">3:50</div>
+                                        </div>
+                                        <div class="video-card-body">
+                                            <div class="btn-group float-right right-action">
+                                                <a href="#" class="right-action-link text-gray" data-toggle="dropdown"
+                                                   aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star"></i> &nbsp; Top
+                                                        Rated</a>
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp;
+                                                        Viewed</a>
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i>
+                                                        &nbsp;
+                                                        Close</a>
+                                                </div>
+                                            </div>
+                                            <div class="video-title">
+                                                <a href="#">Here are many variati of passages of Lorem</a>
+                                            </div>
+                                            <div class="video-page text-success">
+                                                Education <a title="" data-placement="top" data-toggle="tooltip" href="#"
+                                                             data-original-title="Verified"><i
+                                                            class="fas fa-check-circle text-success"></i></a>
+                                            </div>
+                                            <div class="video-view">
+                                                1.8M views &nbsp;<i class="fas fa-calendar-alt"></i> 11 Months ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="video-card video-card-list">
+                                        <div class="video-card-image">
+                                            <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
+                                            <a href="#"><img class="img-fluid" src="img/v2.png" alt=""></a>
+                                            <div class="time">3:50</div>
+                                        </div>
+                                        <div class="video-card-body">
+                                            <div class="btn-group float-right right-action">
+                                                <a href="#" class="right-action-link text-gray" data-toggle="dropdown"
+                                                   aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star"></i> &nbsp; Top
+                                                        Rated</a>
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp;
+                                                        Viewed</a>
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i>
+                                                        &nbsp;
+                                                        Close</a>
+                                                </div>
+                                            </div>
+                                            <div class="video-title">
+                                                <a href="#">Duis aute irure dolor in reprehenderit in.</a>
+                                            </div>
+                                            <div class="video-page text-success">
+                                                Education <a title="" data-placement="top" data-toggle="tooltip" href="#"
+                                                             data-original-title="Verified"><i
+                                                            class="fas fa-check-circle text-success"></i></a>
+                                            </div>
+                                            <div class="video-view">
+                                                1.8M views &nbsp;<i class="fas fa-calendar-alt"></i> 11 Months ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="video-card video-card-list">
+                                        <div class="video-card-image">
+                                            <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
+                                            <a href="#"><img class="img-fluid" src="img/v3.png" alt=""></a>
+                                            <div class="time">3:50</div>
+                                        </div>
+                                        <div class="video-card-body">
+                                            <div class="btn-group float-right right-action">
+                                                <a href="#" class="right-action-link text-gray" data-toggle="dropdown"
+                                                   aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star"></i> &nbsp; Top
+                                                        Rated</a>
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp;
+                                                        Viewed</a>
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i>
+                                                        &nbsp;
+                                                        Close</a>
+                                                </div>
+                                            </div>
+                                            <div class="video-title">
+                                                <a href="#">Culpa qui officia deserunt mollit anim</a>
+                                            </div>
+                                            <div class="video-page text-success">
+                                                Education <a title="" data-placement="top" data-toggle="tooltip" href="#"
+                                                             data-original-title="Verified"><i
+                                                            class="fas fa-check-circle text-success"></i></a>
+                                            </div>
+                                            <div class="video-view">
+                                                1.8M views &nbsp;<i class="fas fa-calendar-alt"></i> 11 Months ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="video-card video-card-list">
+                                        <div class="video-card-image">
+                                            <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
+                                            <a href="#"><img class="img-fluid" src="img/v4.png" alt=""></a>
+                                            <div class="time">3:50</div>
+                                        </div>
+                                        <div class="video-card-body">
+                                            <div class="btn-group float-right right-action">
+                                                <a href="#" class="right-action-link text-gray" data-toggle="dropdown"
+                                                   aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star"></i> &nbsp; Top
+                                                        Rated</a>
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp;
+                                                        Viewed</a>
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i>
+                                                        &nbsp;
+                                                        Close</a>
+                                                </div>
+                                            </div>
+                                            <div class="video-title">
+                                                <a href="#">Deserunt mollit anim id est laborum.</a>
+                                            </div>
+                                            <div class="video-page text-success">
+                                                Education <a title="" data-placement="top" data-toggle="tooltip" href="#"
+                                                             data-original-title="Verified"><i
+                                                            class="fas fa-check-circle text-success"></i></a>
+                                            </div>
+                                            <div class="video-view">
+                                                1.8M views &nbsp;<i class="fas fa-calendar-alt"></i> 11 Months ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="video-card video-card-list">
+                                        <div class="video-card-image">
+                                            <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
+                                            <a href="#"><img class="img-fluid" src="img/v5.png" alt=""></a>
+                                            <div class="time">3:50</div>
+                                        </div>
+                                        <div class="video-card-body">
+                                            <div class="btn-group float-right right-action">
+                                                <a href="#" class="right-action-link text-gray" data-toggle="dropdown"
+                                                   aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star"></i> &nbsp; Top
+                                                        Rated</a>
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp;
+                                                        Viewed</a>
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i>
+                                                        &nbsp;
+                                                        Close</a>
+                                                </div>
+                                            </div>
+                                            <div class="video-title">
+                                                <a href="#">Exercitation ullamco laboris nisi ut.</a>
+                                            </div>
+                                            <div class="video-page text-success">
+                                                Education <a title="" data-placement="top" data-toggle="tooltip" href="#"
+                                                             data-original-title="Verified"><i
+                                                            class="fas fa-check-circle text-success"></i></a>
+                                            </div>
+                                            <div class="video-view">
+                                                1.8M views &nbsp;<i class="fas fa-calendar-alt"></i> 11 Months ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="video-card video-card-list">
+                                        <div class="video-card-image">
+                                            <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
+                                            <a href="#"><img class="img-fluid" src="img/v6.png" alt=""></a>
+                                            <div class="time">3:50</div>
+                                        </div>
+                                        <div class="video-card-body">
+                                            <div class="btn-group float-right right-action">
+                                                <a href="#" class="right-action-link text-gray" data-toggle="dropdown"
+                                                   aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star"></i> &nbsp; Top
+                                                        Rated</a>
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp;
+                                                        Viewed</a>
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i>
+                                                        &nbsp;
+                                                        Close</a>
+                                                </div>
+                                            </div>
+                                            <div class="video-title">
+                                                <a href="#">There are many variations of passages of Lorem</a>
+                                            </div>
+                                            <div class="video-page text-success">
+                                                Education <a title="" data-placement="top" data-toggle="tooltip" href="#"
+                                                             data-original-title="Verified"><i
+                                                            class="fas fa-check-circle text-success"></i></a>
+                                            </div>
+                                            <div class="video-view">
+                                                1.8M views &nbsp;<i class="fas fa-calendar-alt"></i> 11 Months ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="video-card video-card-list">
+                                        <div class="video-card-image">
+                                            <a class="play-icon" href="#"><i class="fas fa-play-circle"></i></a>
+                                            <a href="#"><img class="img-fluid" src="img/v2.png" alt=""></a>
+                                            <div class="time">3:50</div>
+                                        </div>
+                                        <div class="video-card-body">
+                                            <div class="btn-group float-right right-action">
+                                                <a href="#" class="right-action-link text-gray" data-toggle="dropdown"
+                                                   aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-star"></i> &nbsp; Top
+                                                        Rated</a>
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-signal"></i> &nbsp;
+                                                        Viewed</a>
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-fw fa-times-circle"></i>
+                                                        &nbsp;
+                                                        Close</a>
+                                                </div>
+                                            </div>
+                                            <div class="video-title">
+                                                <a href="#">Duis aute irure dolor in reprehenderit in.</a>
+                                            </div>
+                                            <div class="video-page text-success">
+                                                Education <a title="" data-placement="top" data-toggle="tooltip" href="#"
+                                                             data-original-title="Verified"><i
+                                                            class="fas fa-check-circle text-success"></i></a>
+                                            </div>
+                                            <div class="video-view">
+                                                1.8M views &nbsp;<i class="fas fa-calendar-alt"></i> 11 Months ago
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+>>>>>>> Stashed changes
                         </div>
                         <div class="single-video-info-content box" style="box-sizing: 20%;">
                            <h6>Cast:</h6>

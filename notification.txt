@@ -1,0 +1,30 @@
+<<<<<<< Updated upstream
+CREATE TABLE `notification` (
+  `n_id` int NOT NULL AUTO_INCREMENT,
+  `to_channel_id` int NOT NULL,
+  `to_channel_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `from_channel_id` int NOT NULL,
+  `from_channel_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `video_id` int DEFAULT NULL,
+  `Content` varchar(1000) DEFAULT NULL,
+  `Seen` tinyint DEFAULT NULL,
+  `CreatedAt` date DEFAULT NULL,
+  `video_name` varchar(1000) DEFAULT NULL,
+  `n_type` int DEFAULT NULL,
+  PRIMARY KEY (`n_id`)
+=======
+CREATE TABLE `notification` (
+  `n_id` int NOT NULL AUTO_INCREMENT,
+  `to_channel_id` int NOT NULL,
+  `to_channel_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `from_channel_id` int NOT NULL,
+  `from_channel_name` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `video_id` int DEFAULT NULL,
+  `Content` varchar(1000) DEFAULT NULL,
+  `Seen` tinyint DEFAULT NULL,
+  `CreatedAt` date DEFAULT NULL,
+  `video_name` varchar(1000) DEFAULT NULL,
+  `n_type` int DEFAULT NULL,
+  PRIMARY KEY (`n_id`)
+>>>>>>> Stashed changes
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
